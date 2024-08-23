@@ -19,7 +19,7 @@ This puts `languages.toml` (which points to the steel language server) in `./res
 `hx`, if run in this dir will notice that file and use the steel language server for `.scm` files:
 
 ```
-$ hx --health scheme
+❯ hx --health scheme
 Configured language servers:
     ✓ /nix/store/7k9sk1dws893js3svd2rjvx2cmk6j2zk-steel-interpreter-0.6.0/bin/steel-language-server: /nix/store/7k9sk1dws893js3svd2rjvx2cmk6j2zk-steel-interpreter-0.6.0/bin/steel-language-server
   Configured debug adapter: None
@@ -31,7 +31,7 @@ Configured language servers:
 
 You'll also need `hx` to point at the plugin fork.  To do so, enter a the devshell:
 ```
-❯  nix develop
+❯ nix develop
 $ hx  # refers to the plugin fork
 $ exit
 ❯ hx  # refers to your default helix install
