@@ -3,17 +3,17 @@ When it's done it'll be a dev environment for nix users that want to write helix
 
 ### What Works
 
-Build the steel language server and inject its path into `.helix/languages.toml`
+Build the steel language server and inject its path into `.helix/languages.toml`:
 ```
 git clone git@github.com:MatrixManAtYrService/helix-plugin-env.git
 cd helix-plugin-env
 nix build .#helixConfig
 ```
 
-This puts the build outputs in `./result`.
-`.helix` is symlinked to `./result/`, so running `hx` in this dir will include languages.toml.
+This puts the build outputs in `./result` which is symlinked to from `./helix/`.
+Running `hx` in this dir will have it use the steel language server.
 
-Enter a nix devshell with `hx` pointing to the plugin helix fork, it'll use the built languages.toml.
+The default devshell in flake.nix uses `hx` from the plugin fork, use it like so:
 ```
 ❯ nix develop
 $ hx --health scheme
@@ -25,9 +25,6 @@ Configured language servers:
   Textobject queries: ✘
   Indent queries: ✓
 ```
-
-The `hx` used here is the one from the plugin fork.
-
 (instead of `nix develop` you can also use `direnv` to activate this automatically when you enter your plugin's project dir)
 
 # Doesn't work
