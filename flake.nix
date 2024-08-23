@@ -3,8 +3,12 @@
     flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:nixos/nixpkgs";
     steel-flake = {
-      # Use your fork until the upstream PR is merged
+      # Use my fork until https://github.com/mattwparas/steel/pull/261 is merged
       url = "github:MatrixManAtYrService/steel?ref=fix-hash";
+
+      # then switch to this
+      # url = "github:mattwparas/steel";
+
       inputs.nixpkgs.follows = "nixpkgs";
     };
     helix-flake = {
@@ -16,16 +20,21 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
+
+        # contains the fork with the plugin system
+        helix = helix-flake.packages.${system}.helix;
+
+        # the steel flake doesn't build the language server by default, add it to the package list
         steel-pkg = steel-flake.packages.${system}.steel.overrideAttrs (oldAttrs: {
           cargoBuildFlags = "-p cargo-steel-lib -p steel-interpreter -p steel-language-server";
         });
-        helix = helix-flake.packages.${system}.helix;
       in
       {
 
-        # Reference steelPackage to satisfy the linter
         packages = {
           steel = steel-pkg;
+
+          # build 'languages.toml' to point at the steel language server
           helixConfig = pkgs.stdenv.mkDerivation rec {
             name = "helix-config";
             src = ./.;
@@ -34,7 +43,6 @@
               mkdir $out
               cat ${pkgs.substituteAll {
                 src = "${src}/languages.toml.template";
-                steel_formatter_path = "some-path"; # Update as needed
                 steel_language_server_path = "${steel-pkg}/bin/steel-language-server";
               }} > $out/languages.toml
 
