@@ -36,7 +36,7 @@ $ hx  # refers to the plugin fork
 $ exit
 ❯ hx  # refers to your default helix install
 ```
-(instead of `nix develop` you can also use `direnv` to activate this automatically when you enter/leave your plugin's project dir)
+(instead of `nix develop` you can also use [direnv](https://github.com/nix-community/nix-direnv) to activate this automatically when you enter/leave your plugin's project dir)
 
 # Doesn't work
 
