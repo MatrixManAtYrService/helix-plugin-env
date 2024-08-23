@@ -10,7 +10,7 @@ cd helix-plugin-env
 nix build .#helixConfig
 ```
 
-This puts the build outputs in `./result` which is symlinked to from `./helix/`.
+This puts the build outputs in `./result` which is symlinked from `./helix/`.
 Running `hx` in this dir will have it use the steel language server.
 
 The default devshell in flake.nix uses `hx` from the plugin fork, use it like so:
