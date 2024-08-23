@@ -15,12 +15,10 @@ cd helix-plugin-env
 nix build .#helixConfig
 ```
 
-This puts the build outputs in `./result` which is symlinked from `./helix/`.
-Running `hx` in this dir will have it use the steel language server.
+This puts `languages.toml` (which points to the steel language server) in `./result` which is symlinked from `./helix/`.
+`hx`, if run in this dir will notice that file and use the steel language server for `.scm` files:
 
-The default devshell in flake.nix uses `hx` from the plugin fork, use it like so:
 ```
-❯ nix develop
 $ hx --health scheme
 Configured language servers:
     ✓ /nix/store/7k9sk1dws893js3svd2rjvx2cmk6j2zk-steel-interpreter-0.6.0/bin/steel-language-server: /nix/store/7k9sk1dws893js3svd2rjvx2cmk6j2zk-steel-interpreter-0.6.0/bin/steel-language-server
@@ -30,7 +28,15 @@ Configured language servers:
   Textobject queries: ✘
   Indent queries: ✓
 ```
-(instead of `nix develop` you can also use `direnv` to activate this automatically when you enter your plugin's project dir)
+
+You'll also need `hx` to point at the plugin fork.  To do so, enter a the devshell:
+```
+❯  nix develop
+$ hx  # refers to the plugin fork
+$ exit
+❯ hx  # refers to your default helix install
+```
+(instead of `nix develop` you can also use `direnv` to activate this automatically when you enter/leave your plugin's project dir)
 
 # Doesn't work
 
