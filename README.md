@@ -1,5 +1,10 @@
-This is a work in progresss.
-When it's done it'll be a dev environment for nix users that want to write helix plugins.
+### The Goal
+
+When it's ready, this repo will contain a very simple helix plugin.  The idea is that if you want to play around with writing your own helix plugin, you can clone it and have a (hopefully) sane dev environment while you change the simple plugin into one that you're interested in.
+
+In the future, this will seem like overkill, but since the plugin system is not yet merged in to helix/master, I think there's an opportunity to remove some friction which might otherwise prevent a would-be plugin author from providing feedback on the in-development plugin system.
+
+It uses a nix flake for this.  If that's not your jam, appologies.
 
 ### What Works
 
