@@ -42,3 +42,8 @@ $ hx
 ```
 
 I've found that I can create `helix.scm` in the main config location, but that sort of ruins my plan to make this env something that I can easily enter/exit just by `cd`ing in and out of my project dir.
+
+# Contributing
+
+I'm open to different ideas about what an ergonomic helix plugin development workflow might look like.
+Feel free to create issues with whatever thoughts you have and we can chat about it.
