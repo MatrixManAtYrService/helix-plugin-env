@@ -6,53 +6,71 @@ In the future, this will seem like overkill, but since the plugin system is not 
 
 It uses a nix flake for this.  If that's not your jam, appologies.
 
-### What Works
+### Goodies
 
-Build the steel language server and inject its path into `.helix/languages.toml`:
+- `steel` launches the steel repl
+- running `hx` or `hxs` in the project dir configures the steel language server and a scheme formatter (you have to run `nix build` first).
+- `hxs` launches [mattwparas:helix/steel-event-system](https://github.com/mattwparas/helix/tree/steel-event-system) ([overrides the theme to `hex_toxic`](init.scm)) to visually distinguish it from `hx`)
+
+#### How To
+
+Build the goodies and inject their paths into `.helix/languages.toml`:
 ```
 git clone git@github.com:MatrixManAtYrService/helix-plugin-env.git
 cd helix-plugin-env
-nix build .#helixConfig
+nix build
 ```
 
-This puts `languages.toml` (which points to the steel language server) in `./result` which is symlinked from `./helix/`.
-`hx`, if run in this dir will notice that file and use the steel language server for `.scm` files:
+This populates `./result` which is symlinked from `./helix/`.
 
 ```
-❯ hx --health scheme
+❯  hx --health scheme
 Configured language servers:
-    ✓ /nix/store/7k9sk1dws893js3svd2rjvx2cmk6j2zk-steel-interpreter-0.6.0/bin/steel-language-server: /nix/store/7k9sk1dws893js3svd2rjvx2cmk6j2zk-steel-interpreter-0.6.0/bin/steel-language-server
-  Configured debug adapter: None
-  Configured formatter: None
-  Highlight queries: ✓
-  Textobject queries: ✘
-  Indent queries: ✓
+  ✓ /nix/store/nlcb3x91044749ilbfymk7bz26jipd3r-steel-interpreter-0.6.0/bin/steel-language-server: /nix/store/nlcb3x91044749ilbfymk7bz26jipd3r-steel-interpreter-0.6.0/bin/steel-language-server
+Configured debug adapter: None
+Configured formatter: /nix/store/lqw1cz2kg5s0kgglbhikgc8z4ldwn0bp-code-formatter/bin/scheme-format
+Binary for formatter: /nix/store/lqw1cz2kg5s0kgglbhikgc8z4ldwn0bp-code-formatter/bin/scheme-format
+Highlight queries: ✓
+Textobject queries: ✘
+Indent queries: ✓
 ```
 
-You'll also need `hx` to point at the plugin fork.  To do so, enter a the devshell:
+To run `hxs` or `steel` enter a dev-shell
 ```
-❯ nix develop
-$ hx  # refers to the plugin fork
-$ exit
-❯ hx  # refers to your default helix install
-```
-(instead of `nix develop` you can also use [direnv](https://github.com/nix-community/nix-direnv) to activate this automatically when you enter/leave your plugin's project dir)
+❯ nix build     # stages helix.scm and init.scm
+❯ nix develop   # prepares 'steel' and 'hxs'
+  $ steel
 
-# Doesn't work
+         _____ __            __
+        / ___// /____  ___  / /          Version 0.6.0
+        \__ \/ __/ _ \/ _ \/ /           https://github.com/mattwparas/steel
+       ___/ / /_/  __/  __/ /            :? for help
+      /____/\__/\___/\___/_/
 
-`.helix/` is not consulted for `helix.scm`
-
-```
-$ hx
-  error[E08]: Io
-     ┌─ :1:2
-     │
-   1 │ (require "/home/matt/.config/helix/helix.scm")
-     │  ^^^^^^^ Attempting to load module from: "/home/matt/.config/helix/helix.scm" No such file or directory (os error
-   2)
+    λ > (display "hello world")
+    hello world
+    λ >
+    CTRL-D
+  $ hxs         # helix.scm and init.scm are referenced
+  $ exit        # exit the devshell
+❯ hxs           # command not found
 ```
 
-I've found that I can create `helix.scm` in the main config location, but that sort of ruins my plan to make this env something that I can easily enter/exit just by `cd`ing in and out of my project dir.
+(instead of `nix develop` you can also use [direnv](https://github.com/nix-community/nix-direnv) to activate this automatically when you enter/leave the plugin project dir)
+
+### Currently Broken
+
+#### cargo xtask steel
+
+Most of this README was written on a system where I had run `cargo xtask steel` at some point.  
+
+Then I tried on a different machine and `hxs` failed with an error:
+```
+(require "helix/editor.scm")
+     │  ^^^^^^^ Attempting to load module from: "/Users/matt/.steel/cogs/helix/editor.scm"
+```
+TODO: make the flake handle that too (something to do with STEEL_HOME I imagine).
+That way the dev env can be self-contained.
 
 # Contributing
 

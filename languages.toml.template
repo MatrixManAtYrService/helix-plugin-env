@@ -1,8 +1,10 @@
-[[language]]
-language-servers = ["steel-language-server"]
-name = "scheme"
-
-[language-server]
 [language-server.steel-language-server]
 args = []
 command = "@steel_language_server_path@"
+
+[[language]]
+name = "scheme"
+formatter = { command = "@scheme_format@", args = ["/dev/stdin"]}
+auto-format = true
+language-servers = ["steel-language-server"]
+

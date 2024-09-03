@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "code-formatter": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1625130376,
+        "narHash": "sha256-qKNJ8+gjZXtMPuE+Fxoo3s30lLf/WSR45DzWMyHJWGI=",
+        "owner": "lispunion",
+        "repo": "code-formatter",
+        "rev": "112206e3d3cc51df0ba8c04e28917484069d5aff",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lispunion",
+        "repo": "code-formatter",
+        "type": "github"
+      }
+    },
     "crane": {
       "inputs": {
         "nixpkgs": [
@@ -83,15 +99,15 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1723507334,
-        "narHash": "sha256-OMspI01f4Z0AKIRzFJvJzmCZB9yrh4w8+O6YRLTScjE=",
-        "owner": "mattwparas",
+        "lastModified": 1725311525,
+        "narHash": "sha256-DgllopHqxPiKWxg7SvsL9S15Q3IDTEEgiYO3XaRDCRs=",
+        "owner": "MatrixManAtYrService",
         "repo": "helix",
-        "rev": "199c9c2cfbafea1caf279597660660abbd0dacca",
+        "rev": "7223eea8fcc82d32d033840e128366cad40c89c8",
         "type": "github"
       },
       "original": {
-        "owner": "mattwparas",
+        "owner": "MatrixManAtYrService",
         "ref": "steel-event-system",
         "repo": "helix",
         "type": "github"
@@ -115,11 +131,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1724035313,
-        "narHash": "sha256-zcnCwLMWHwdsno74oagZfz3AhVdANtrHpOeRCfhy4/c=",
+        "lastModified": 1725308876,
+        "narHash": "sha256-xHr7seRYtBxLtt6oBKQmCiEWyfDa3hK27j8ZhNBHq6A=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "f84991dc2bfc98c32174dbc92290d84438342867",
+        "rev": "19d5863163b98eac0d39fb1c76409e50b427ba01",
         "type": "github"
       },
       "original": {
@@ -130,6 +146,7 @@
     },
     "root": {
       "inputs": {
+        "code-formatter": "code-formatter",
         "flake-utils": "flake-utils",
         "helix-flake": "helix-flake",
         "nixpkgs": "nixpkgs_2",
@@ -169,11 +186,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1724037232,
-        "narHash": "sha256-ANSscmzn8UULssrQsPRBas2le6qmxKsd1MgC8+4yCK4=",
+        "lastModified": 1725297984,
+        "narHash": "sha256-ONR6yOB1/2QLSVQcsxOYf/VyBXkYnHmbwOXflvql3G4=",
         "owner": "MatrixManAtYrService",
         "repo": "steel",
-        "rev": "ce2611194c8643523d9e7636a9053a181e1aa4e2",
+        "rev": "3837b9ce08beb830a3ec4d367ae27a7647d74eed",
         "type": "github"
       },
       "original": {
