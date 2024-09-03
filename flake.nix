@@ -28,12 +28,16 @@
       url = "github:lispunion/code-formatter";
       flake = false;
     };
+
   };
 
   outputs = { self, nixpkgs, flake-utils, steel-flake, helix-flake, code-formatter }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = import nixpkgs { inherit system; };
+        pkgs = import nixpkgs { 
+          inherit system; 
+        };
+
 
         # contains the fork with the plugin system
         helix = helix-flake.packages.${system}.helix;
@@ -109,6 +113,9 @@
             code-formatter-pkg
             pkgs.nixpkgs-fmt
             ];
+          shellHook = ''
+            export STEEL_HOME=${steel-pkg}/lib
+          '';
         };
       });
 }
