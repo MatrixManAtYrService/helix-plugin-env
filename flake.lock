@@ -1,21 +1,5 @@
 {
   "nodes": {
-    "code-formatter": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1625130376,
-        "narHash": "sha256-qKNJ8+gjZXtMPuE+Fxoo3s30lLf/WSR45DzWMyHJWGI=",
-        "owner": "lispunion",
-        "repo": "code-formatter",
-        "rev": "112206e3d3cc51df0ba8c04e28917484069d5aff",
-        "type": "github"
-      },
-      "original": {
-        "owner": "lispunion",
-        "repo": "code-formatter",
-        "type": "github"
-      }
-    },
     "crane": {
       "inputs": {
         "nixpkgs": [
@@ -146,7 +130,6 @@
     },
     "root": {
       "inputs": {
-        "code-formatter": "code-formatter",
         "flake-utils": "flake-utils",
         "helix-flake": "helix-flake",
         "nixpkgs": "nixpkgs_2",

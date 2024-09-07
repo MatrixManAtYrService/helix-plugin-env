@@ -24,14 +24,9 @@
       # url = "github:helix-editor/helix";
     };
 
-    code-formatter = {
-      url = "github:lispunion/code-formatter";
-      flake = false;
-    };
-
   };
 
-  outputs = { self, nixpkgs, flake-utils, steel-flake, helix-flake, code-formatter }:
+  outputs = { self, nixpkgs, flake-utils, steel-flake, helix-flake}:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { 
@@ -60,27 +55,7 @@
           cargoBuildFlags = "-p cargo-steel-lib -p steel-interpreter -p steel-language-server";
         });
 
-        # mattwparas used `raco fmt`, which gave me some difficuly when trying to nixify it
-        # unsure if this is equivalent, but it seems close?
-        code-formatter-pkg = pkgs.stdenv.mkDerivation {
-          name = "code-formatter";
-          src = code-formatter;
-          buildInputs = with pkgs.chickenPackages_5.chickenEggs; [
-            # warning: the versions of these in nixpkgs don't precisely match 
-            # the ones determined by the repo but it seems to work ok
-            simple-loops
-            callable-data-structures
-            srfi-1
-            srfi-13
-            matchable
-          ] ++ [ pkgs.chicken ];
-          installPhase = ''
-            mkdir -p $out/bin
-            csc -s etc.scm -j etc
-            csc -s format.scm -j format
-            csc -static main.scm -o $out/bin/scheme-format
-          '';
-        };
+        scmfmt = pkgs.chickenPackages_5.chickenEggs.scmfmt;
 
         helix-config = pkgs.stdenv.mkDerivation rec {
           name = "helix-config";
@@ -91,7 +66,7 @@
             cat ${pkgs.substituteAll {
               src = "${src}/languages.toml.template";
               steel_language_server_path = "${steel-pkg}/bin/steel-language-server";
-              scheme_format = "${code-formatter-pkg}/bin/scheme-format";
+              scmfmt = "${scmfmt}/bin/scmfmt";
             }} > $out/languages.toml
 
             cp ${src}/*.scm $out
@@ -110,7 +85,7 @@
           packages = [ 
             steel-pkg 
             hxs 
-            code-formatter-pkg
+            scmfmt
             pkgs.nixpkgs-fmt
             ];
           shellHook = ''
