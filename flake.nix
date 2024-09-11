@@ -87,6 +87,10 @@
             hxs 
             scmfmt
             pkgs.nixpkgs-fmt
+            pkgs.emacs
+            pkgs.emacsPackages.evil
+            pkgs.emacsPackages.lispy
+            pkgs.emacsPackages.lispyville
             ];
           shellHook = ''
             export STEEL_HOME=${steel-pkg}/lib

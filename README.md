@@ -58,6 +58,16 @@ To run `hxs` or `steel` enter a dev-shell
 
 (instead of `nix develop` you can also use [direnv](https://github.com/nix-community/nix-direnv) to activate this automatically when you enter/leave the plugin project dir)
 
+### Emacs?
+
+As nice as it would be to use helix to write helix plugins, making helix a first class lisp editor requires... plugins.
+It's a bit of a catch-22.
+
+For now I'm bundling emacs, configured with lispyville, which I'm using as a steel editor:
+
+TODO: make a wrapper instead of using this:
+`emacs -nw -q -l config.emacs example.scm`
+
 ### Currently Broken
 
 #### cargo xtask steel
