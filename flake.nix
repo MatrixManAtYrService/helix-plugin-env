@@ -24,13 +24,16 @@
       # url = "github:helix-editor/helix";
     };
 
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
+
   };
 
-  outputs = { self, nixpkgs, flake-utils, steel-flake, helix-flake}:
+  outputs = { self, nixpkgs, flake-utils, steel-flake, helix-flake, emacs-overlay}:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { 
           inherit system; 
+          overlays = [emacs-overlay.overlays.default];
         };
 
 
@@ -69,8 +72,21 @@
               scmfmt = "${scmfmt}/bin/scmfmt";
             }} > $out/languages.toml
 
-            cp ${src}/*.scm $out
+            cp ${src}/helix.scm $out
+            cp ${src}/init.scm $out
+
+            mkdir $out/steel_home
           '';
+        };
+
+        emacs = pkgs.emacsWithPackagesFromUsePackage {
+          config = ./emacs.el;
+          package = pkgs.emacs-unstable;
+          extraEmacsPackages = epkgs: [
+            epkgs.symex
+            epkgs.evil
+            epkgs.paredit
+          ];
         };
 
       in
@@ -87,13 +103,10 @@
             hxs 
             scmfmt
             pkgs.nixpkgs-fmt
-            pkgs.emacs
-            pkgs.emacsPackages.evil
-            pkgs.emacsPackages.lispy
-            pkgs.emacsPackages.lispyville
+            emacs
             ];
           shellHook = ''
-            export STEEL_HOME=${steel-pkg}/lib
+            export STEEL_HOME=$PWD/.steel
           '';
         };
       });
