@@ -15,7 +15,7 @@
 
     helix-flake = {
       # Use my fork until https://github.com/mattwparas/helix/pull/4 is merged
-      url = "github:MatrixManAtYrService/helix?ref=steel-event-system";
+      url = "github:MatrixManAtYrService/helix?ref=all";
 
       # then switch to this until https://github.com/helix-editor/helix/pull/8675 is merged
       # url = "github:mattwparas/helix?ref=steel-event-system";
@@ -28,17 +28,20 @@
 
   };
 
-  outputs = { self, nixpkgs, flake-utils, steel-flake, helix-flake, emacs-overlay}:
+  outputs = { self, nixpkgs, flake-utils, steel-flake, helix-flake, emacs-overlay }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = import nixpkgs { 
-          inherit system; 
-          overlays = [emacs-overlay.overlays.default];
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [
+            emacs-overlay.overlays.default
+
+          ];
         };
 
-
-        # contains the fork with the plugin system
-        helix = helix-flake.packages.${system}.helix;
+        helix-outputs = helix-flake.packages.${system};
+        helix = helix-outputs.helix;
+        helix-cogs = helix-outputs.helix-cogs;
 
 
         # Presumably the caller already has helix installed and configured to
@@ -64,6 +67,7 @@
           name = "helix-config";
           src = ./.;
           phases = [ "installPhase" ];
+
           installPhase = ''
             mkdir $out
             cat ${pkgs.substituteAll {
@@ -75,7 +79,8 @@
             cp ${src}/helix.scm $out
             cp ${src}/init.scm $out
 
-            mkdir $out/steel_home
+            mkdir $out/cogs
+            cp -r ${helix-cogs}/cogs/helix $out/cogs/helix
           '';
         };
 
@@ -94,17 +99,18 @@
         packages = {
           steel = steel-pkg;
           helix-config = helix-config;
+          helix_cogs = helix-cogs;
           default = helix-config;
         };
 
         devShells.default = pkgs.mkShell {
-          packages = [ 
-            steel-pkg 
-            hxs 
+          packages = [
+            steel-pkg
+            hxs
             scmfmt
             pkgs.nixpkgs-fmt
             emacs
-            ];
+          ];
           shellHook = ''
             export STEEL_HOME=$PWD/.steel
           '';

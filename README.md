@@ -68,20 +68,6 @@ For now I'm bundling emacs, configured with lispyville, which I'm using as a ste
 TODO: make a wrapper instead of using this:
 `emacs -nw -q -l config.emacs example.scm`
 
-### Currently Broken
-
-#### cargo xtask steel
-
-Most of this README was written on a system where I had run `cargo xtask steel` at some point.  
-
-Then I tried on a different machine and `hxs` failed with an error:
-```
-(require "helix/editor.scm")
-     │  ^^^^^^^ Attempting to load module from: "/Users/matt/.steel/cogs/helix/editor.scm"
-```
-TODO: make the flake handle that too (something to do with STEEL_HOME I imagine).
-That way the dev env can be self-contained.
-
 # Contributing
 
 I'm open to different ideas about what an ergonomic helix plugin development workflow might look like.
