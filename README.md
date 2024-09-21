@@ -37,7 +37,7 @@ Indent queries: ✓
 
 To run `hxs` or `steel` enter a dev-shell
 ```
-❯ nix build     # stages helix.scm and init.scm
+❯ nix build     # stages the plugin environment
 ❯ nix develop   # prepares 'steel' and 'hxs'
   $ steel
 
@@ -58,15 +58,26 @@ To run `hxs` or `steel` enter a dev-shell
 
 (instead of `nix develop` you can also use [direnv](https://github.com/nix-community/nix-direnv) to activate this automatically when you enter/leave the plugin project dir)
 
-### Emacs?
+# What's broken
 
-As nice as it would be to use helix to write helix plugins, making helix a first class lisp editor requires... plugins.
-It's a bit of a catch-22.
+Currently, running `hxs` shows you this error:
+![Error: ArityMismatch: require-builtin malformed - follows the pattern (require-builtin "<module>") or (require-builtin "<module>" as <prefix>](error.png)
 
-For now I'm bundling emacs, configured with lispyville, which I'm using as a steel editor:
+I think that's an error in one of the `.scm` files in this repo (I got them from [mattwparas/helix-config](https://github.com/mattwparas/helix-config)), so maybe it's a sign that the environment is correct and the it's the plugin that's broken?
+That's progress.
 
-TODO: make a wrapper instead of using this:
-`emacs -nw -q -l config.emacs example.scm`
+Next: pick just one plugin in the helix-config repo and add it here bit-by-bit.
+This will either isolate, or avoid, the error.
+
+# A Note about `STEEL_HOME`
+
+Currently, the devshell in `flake.nix` sets `STEEL_HOME` to `./.steel`.
+From there, the `cogs` directory is symlinked to `./result/cogs`.
+This means that you must run `nix build` in order for any changes to show up, and if you add any new files, they must be copied by the `helix-config` derivation in `flake.nix`.
+
+This is a somewhat clunky arrangement.
+I'll be experimenting later with improvements.
+
 
 # Contributing
 

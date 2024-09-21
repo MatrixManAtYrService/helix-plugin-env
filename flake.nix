@@ -119,7 +119,12 @@
             hxs
             scmfmt
             pkgs.nixpkgs-fmt
-            #emacs
+
+            #emacs  # takes a long time to build
+            # but it's kind of nice because it already has an ecosystem of lisp-editing plugins
+            # TODO: make a wrapper instead of using this:
+            # for now I'm running it like this:
+            # emacs -nw -q -l config.emacs somefile.scm
           ];
           shellHook = ''
             export STEEL_HOME=$PWD/.steel
