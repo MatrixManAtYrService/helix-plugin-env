@@ -79,8 +79,18 @@
             cp ${src}/helix.scm $out
             cp ${src}/init.scm $out
 
-            mkdir $out/cogs
-            cp -r ${helix-cogs}/cogs/helix $out/cogs/helix
+            mkdir -p $out/cogs
+            cp -r ${helix-cogs}/cogs $out
+            cp -r ${steel-pkg}/lib/cogs $out
+
+
+            # by having the entire cogs dir in the nix store, I'm requiring a `nix build` every time
+            # it might be nicer to reference the .scm files in this repo directly, so that edits show up without rebuilding the config
+            # TODO: more symlinks inside of ./.steel, some to the nix store, others directly to these file
+            # for now: make copies
+            mkdir $out/cogs/cogs
+            cp -r ${./cogs}/* $out/cogs/cogs
+            cp ${./term.scm} $out/cogs/term.scm
           '';
         };
 
@@ -109,7 +119,7 @@
             hxs
             scmfmt
             pkgs.nixpkgs-fmt
-            emacs
+            #emacs
           ];
           shellHook = ''
             export STEEL_HOME=$PWD/.steel
