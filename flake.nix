@@ -14,7 +14,10 @@
     };
 
     helix-flake = {
-      # Use my fork until https://github.com/mattwparas/helix/pull/4 is merged
+      # Until the following are merged:
+      # - https://github.com/mattwparas/helix/pull/6
+      # - https://github.com/mattwparas/helix/pull/7
+      # use my fork (which includes both of the above)
       url = "github:MatrixManAtYrService/helix?ref=all";
 
       # then switch to this until https://github.com/helix-editor/helix/pull/8675 is merged
