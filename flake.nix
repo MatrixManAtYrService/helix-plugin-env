@@ -97,6 +97,10 @@
           '';
         };
 
+        # Maybe it's a bit weird to find editors besides helix here
+        # but emacs already has lisp-editing plugins, while helix doesn't.
+        # So maybe we learn from the emacs plugin ecosystem while we build the
+        # helix plugin ecosystem?
         emacs = pkgs.emacsWithPackagesFromUsePackage {
           config = ./emacs.el;
           package = pkgs.emacs-unstable;
@@ -106,6 +110,10 @@
             epkgs.paredit
           ];
         };
+        stemacs = pkgs.writeShellScriptBin "stemacs" ''
+          exec ${emacs}/bin/emacs -nw -q -l ${./emacs.el} "$@"
+        '';
+
 
       in
       {
@@ -122,12 +130,7 @@
             hxs
             scmfmt
             pkgs.nixpkgs-fmt
-
-            #emacs  # takes a long time to build
-            # but it's kind of nice because it already has an ecosystem of lisp-editing plugins
-            # TODO: make a wrapper instead of using this:
-            # for now I'm running it like this:
-            # emacs -nw -q -l config.emacs somefile.scm
+            stemacs
           ];
           shellHook = ''
             export STEEL_HOME=$PWD/.steel

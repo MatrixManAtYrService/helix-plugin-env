@@ -10,17 +10,59 @@
 (setq visible-bell t)
 (setq ring-bell-function 'ignore)
 
-
+; Warning, an AI wrote this and although I think it works OK, I don't really understand it
 (defun eval-with-steel ()
-  "Evaluate the current buffer with the steel interpreter."
+  "Evaluate the s-expression under the cursor with the steel interpreter."
   (interactive)
-  (let* ((file-name (buffer-file-name))
-         (output-buffer "*Steel Output*"))
-    (if file-name
+  (let* ((output-buffer "*Steel Output*")
+         (current-buffer (current-buffer))
+         (sexp (thing-at-point 'sexp))
+         (result (when sexp
+                   (with-temp-buffer
+                     (insert sexp)
+                     (call-process-region (point-min) (point-max) "steel" t t nil)
+                     (buffer-string))))
+         (filtered-result (when result
+                            (with-temp-buffer
+                              (insert result)
+                              (goto-char (point-min))
+                              (delete-non-matching-lines "^λ > ")
+                              (goto-char (point-min))
+                              (while (re-search-forward "^λ > " nil t)
+                                (replace-match ""))
+                              (goto-char (point-max))
+                              (when (re-search-backward "^CTRL-D$" nil t)
+                                (delete-region (line-beginning-position) (point-max)))
+                              (goto-char (point-min))
+                              (while (re-search-forward "\n+" nil t)
+                                (replace-match "\n"))
+                              (string-trim (buffer-string))))))
+    (if sexp
         (progn
-          (shell-command (concat "cat " file-name " | steel") output-buffer)
-          (pop-to-buffer output-buffer))
-      (message "Buffer not associated with a file!"))))
+          (with-current-buffer (get-buffer-create output-buffer)
+            (goto-char (point-max))
+            (unless (bobp)
+              (insert "\n"))
+            (insert filtered-result))
+          (display-buffer output-buffer)
+          (set-buffer current-buffer))
+      (message "No s-expression found at point"))))
+
+(defun symex-eval-scheme-custom ()
+  "Eval Scheme symex using custom function."
+  (eval-with-steel))
+
+(defun symex-interface-register-scheme-custom ()
+  "Register the custom Scheme runtime interface."
+  (symex-interface-extend
+   symex-scheme-modes
+   (list
+    :eval #'symex-eval-scheme-custom
+    :eval-definition #'eval-with-steel
+    :eval-pretty #'symex-eval-scheme-custom)))
+
+(advice-add 'symex-interface-register-scheme :override #'symex-interface-register-scheme-custom)
+
 
 (require 'use-package)
 (use-package symex
@@ -32,5 +74,6 @@
   ; press , in normal mode to enter symex mode
   (evil-define-key 'normal 'global (kbd ",") 'symex-mode-interface)
 
-  (evil-define-key 'normal symex-mode-map (kbd "e") 'eval-with-steel)
+  ; press e in symex mode to evaluate the selected expression
+  (evil-define-key '(normal) symex-mode-map (kbd "e") 'symex-eval-scheme-custom)
 )
