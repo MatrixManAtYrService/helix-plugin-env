@@ -11,7 +11,6 @@ It uses a nix flake for this.  If that's not your jam, appologies.
 - `steel` launches the steel repl
 - running `hx` or `hxs` in the project dir configures the steel language server and a scheme formatter (you have to run `nix build` first).
 - `hxs` launches [mattwparas:helix/steel-event-system](https://github.com/mattwparas/helix/tree/steel-event-system) ([overrides the theme to `hex_toxic`](init.scm)) to visually distinguish it from `hx`)
-- `stemacs` launches emacs configured to work with steel (I'm not an emacs pro, this might be weird)
 
 #### How To
 
