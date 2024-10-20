@@ -1,3 +1,7 @@
+;; I don't really know what I'm doing
+;; I also got a lot of AI help wit this
+;; Anyhow it's usable enough for me
+
 ; disable some ui elements
 (tool-bar-mode -1)
 (menu-bar-mode -1)
@@ -10,7 +14,6 @@
 (setq visible-bell t)
 (setq ring-bell-function 'ignore)
 
-; Warning, an AI wrote this and although I think it works OK, I don't really understand it
 (defun eval-with-steel ()
   "Evaluate the s-expression under the cursor with the steel interpreter."
   (interactive)
@@ -40,13 +43,15 @@
     (if sexp
         (progn
           (with-current-buffer (get-buffer-create output-buffer)
-            (goto-char (point-max))
-            (unless (bobp)
-              (insert "\n"))
-            (insert filtered-result))
+            (let ((inhibit-read-only t))  ; Allow modification of read-only buffer
+              (goto-char (point-max))
+              (unless (bobp)
+                (insert "\n"))
+              (insert filtered-result)))
           (display-buffer output-buffer)
           (set-buffer current-buffer))
       (message "No s-expression found at point"))))
+
 
 (defun symex-eval-scheme-custom ()
   "Eval Scheme symex using custom function."
@@ -63,7 +68,6 @@
 
 (advice-add 'symex-interface-register-scheme :override #'symex-interface-register-scheme-custom)
 
-
 (require 'use-package)
 (use-package symex
   :custom
@@ -76,4 +80,24 @@
 
   ; press e in symex mode to evaluate the selected expression
   (evil-define-key '(normal) symex-mode-map (kbd "e") 'symex-eval-scheme-custom)
+
+  ; press escape from insert mode to go to symex mode
+  ; press it again to get back to normal mode
+  ; this is awkward if you didn't enter insert from symex
+  ; otherwise it feels pretty good
+  (evil-define-key 'insert 'global [escape] 'symex-mode-interface)
+)
+
+; Highlight parentheses configuration
+(require 'highlight-parentheses)
+(use-package highlight-parentheses
+  :ensure t
+  :config
+  (global-highlight-parentheses-mode)
+  (add-hook 'scheme-mode-hook #'highlight-parentheses-mode)
+  (add-hook 'minibuffer-setup-hook #'highlight-parentheses-minibuffer-setup)
+
+  ; Optional: Customize colors if you want
+  (setq highlight-parentheses-colors '("magenta" "red" "orange1" "yellow1" "green1" 
+    "cyan1" "slateblue1" "purple" "lavender"))
 )

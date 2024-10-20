@@ -103,11 +103,11 @@
         # helix plugin ecosystem?
         emacs = pkgs.emacsWithPackagesFromUsePackage {
           config = ./emacs.el;
-          package = pkgs.emacs;
+          package = pkgs.emacs30 ;
           extraEmacsPackages = epkgs: [
             epkgs.symex
             epkgs.evil
-            epkgs.paredit
+            epkgs.highlight-parentheses
           ];
         };
         stemacs = pkgs.writeShellScriptBin "stemacs" ''
@@ -130,7 +130,7 @@
             hxs
             scmfmt
             pkgs.nixpkgs-fmt
-            # stemacs # the build is slow
+            stemacs
           ];
           shellHook = ''
             export STEEL_HOME=$PWD/.steel
